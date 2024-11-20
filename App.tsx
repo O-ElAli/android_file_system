@@ -60,13 +60,22 @@ const App = () => {
 
   const listFile = async () => {
     try {
-      const filePath = `/data/user`;
+      const filePath = `${Dirs.SDCardDir}`;
 
-      const files = await FileSystem.ls(filePath)
+      const recursiveFileSearch = async (currentPath : string) => {
 
-      setFileText(files.join('\n'))
+        const files = await FileSystem.ls(currentPath);
 
-      console.log(filePath)
+        for (let file of files){
+          console.log(file)
+        }
+
+
+        setFileText(files.join('\n'))
+
+      }
+
+      recursiveFileSearch(filePath);
 
     } catch (error) {
       
