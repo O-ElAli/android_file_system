@@ -66,12 +66,21 @@ const App = () => {
 
         const files = await FileSystem.ls(currentPath);
 
-        for (let file of files){
-          console.log(file)
+        for (const file of files){
+          
+          const hasSubfolders = await FileSystem.ls(file)
+
+          if(hasSubfolders == []){
+            setFileText(file,...fileText);
+          }
+          else{
+            recursiveFileSearch(`${Dirs.SDCardDir}/${file}`)
+          }
+
         }
 
 
-        setFileText(files.join('\n'))
+        // setFileText(files.join('\n'))
 
       }
 
