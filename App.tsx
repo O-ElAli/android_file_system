@@ -59,15 +59,16 @@ const App = () => {
   }
 
   const listFile = async () => {
+    console.log('started ListFile function')
     try {
       const filePath = `${Dirs.SDCardDir}`;
 
 
       const recursiveFileSearch = async (currentPath : string) => {
+        console.log('started recursive function')
         let result = []
-        const files = await FileSystem.ls(currentPath);
 
-        console.log(result)
+        const files = await FileSystem.ls(currentPath);
 
         for (const file of files){
           
@@ -90,7 +91,8 @@ const App = () => {
   }
 
   const listFileTop = async () => {
-    const result = await listFile;
+    console.log('test')
+    const result = await listFile();
     setFileText(result);
   }
 
