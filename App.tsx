@@ -59,32 +59,37 @@ const App = () => {
   }
 
   const listFile = async () => {
-    console.log('started ListFile function')
     try {
       const filePath = `${Dirs.SDCardDir}`;
 
 
-      const recursiveFileSearch = async (currentPath : string) => {
-        console.log('started recursive function')
+      const recursiveFileSearch = async (currentPath) => {
         let result = []
 
         const files = await FileSystem.ls(currentPath);
 
         for (const file of files){
           
-          const hasSubfolders = await FileSystem.ls(file)
+          const hasSubfolders = await FileSystem.ls(`${Dirs.SDCardDir}/${file}`)
+          // console.log(file)
 
           if(hasSubfolders.length==0){
             result.push(file);
           }
           else{
-            //result.push(recursiveFileSearch(`${Dirs.SDCardDir}/${file}`));
+            console.log('reached the else')
+
+            const recursiveResult =  await recursiveFileSearch(`${Dirs.SDCardDir}/${file}`)
+            console.log(recursiveResult)
+            result = result.concat(recursiveResult);
+
           }
           
         }
         return(result)
         // setFileText(files.join('\n'))
       }
+      
       return(recursiveFileSearch(filePath));
     } catch (error) {
     }
@@ -93,7 +98,9 @@ const App = () => {
   const listFileTop = async () => {
     console.log('test')
     const result = await listFile();
-    setFileText(result);
+    setFileText(result.join('\n'));
+    console.log('finished recursion')
+
   }
 
 
