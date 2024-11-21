@@ -62,33 +62,36 @@ const App = () => {
     try {
       const filePath = `${Dirs.SDCardDir}`;
 
-      const recursiveFileSearch = async (currentPath : string) => {
 
+      const recursiveFileSearch = async (currentPath : string) => {
+        let result = []
         const files = await FileSystem.ls(currentPath);
+
+        console.log(result)
 
         for (const file of files){
           
           const hasSubfolders = await FileSystem.ls(file)
 
-          if(hasSubfolders == []){
-            setFileText(file,...fileText);
+          if(hasSubfolders.length==0){
+            result.push(file);
           }
           else{
-            recursiveFileSearch(`${Dirs.SDCardDir}/${file}`)
+            //result.push(recursiveFileSearch(`${Dirs.SDCardDir}/${file}`));
           }
-
+          
         }
-
-
+        return(result)
         // setFileText(files.join('\n'))
-
       }
-
-      recursiveFileSearch(filePath);
-
+      return(recursiveFileSearch(filePath));
     } catch (error) {
-      
     }
+  }
+
+  const listFileTop = async () => {
+    const result = await listFile;
+    setFileText(result);
   }
 
 
@@ -123,7 +126,7 @@ const App = () => {
       <Text>
 
       </Text>
-      <Button title="List the file" onPress={listFile} />  {/* Calls listFile on press */}
+      <Button title="List the file" onPress={listFileTop} />  {/* Calls listFile on press */}
 
       <Text style={{ marginTop: 20 }}>{fileText}</Text> {/* Display file content here */}
     </View>
