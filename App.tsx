@@ -70,17 +70,21 @@ const App = () => {
 
         for (const file of files){
           
-          const hasSubfolders = await FileSystem.ls(`${Dirs.SDCardDir}/${file}`)
+          if(file=='.thumbnails'){
+            console.log(currentPath)
+          }
+
+          const hasSubfolders = await FileSystem.ls(`${currentPath}/${file}`)
           // console.log(file)
 
           if(hasSubfolders.length==0){
             result.push(file);
           }
           else{
-            console.log('reached the else')
+            //console.log('reached the else')
 
-            const recursiveResult =  await recursiveFileSearch(`${Dirs.SDCardDir}/${file}`)
-            console.log(recursiveResult)
+            const recursiveResult =  await recursiveFileSearch(`${currentPath}/${file}`)
+            //console.log(recursiveResult)
             result = result.concat(recursiveResult);
 
           }
