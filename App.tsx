@@ -62,6 +62,7 @@ const App = () => {
     try {
       const filePath = `${Dirs.SDCardDir}`;
 
+      console.log(filePath)
 
       const recursiveFileSearch = async (currentPath) => {
         let result = []
@@ -69,27 +70,42 @@ const App = () => {
         const files = await FileSystem.ls(currentPath);
 
         for (const file of files){
-          
-          if(file=='.thumbnails'){
-            console.log(currentPath)
-          }
+          //use stat
+          const tempPath = `${currentPath}/${file}`
 
-          const hasSubfolders = await FileSystem.ls(`${currentPath}/${file}`)
-          // console.log(file)
+          const stat = await FileSystem.stat(tempPath);
 
-          if(hasSubfolders.length==0){
-            result.push(file);
-          }
-          else{
+          //console.log(tempPath);
+
+          if(stat.type === "directory"){
             //console.log('reached the else')
-
-            const recursiveResult =  await recursiveFileSearch(`${currentPath}/${file}`)
+            console.log('test2')
+            const recursiveResult =  await recursiveFileSearch(tempPath)
             //console.log(recursiveResult)
             result = result.concat(recursiveResult);
-
           }
+          else{
+            result.push(tempPath);
+            console.log('result1')
+          }
+
+
+
+          // if(stat.type == "file"){
+          //   result.push(tempPath);
+          //   console.log('result1')
+          // }
+          // else if (stat.type == "directory"){
+          //   //console.log('reached the else')
+          //   console.log('test2')
+          //   const recursiveResult =  await recursiveFileSearch(tempPath)
+          //   //console.log(recursiveResult)
+          //   result = result.concat(recursiveResult);
+
+          // }
           
         }
+        console.log(result)
         return(result)
         // setFileText(files.join('\n'))
       }
@@ -99,11 +115,21 @@ const App = () => {
     }
   }
 
+
+class dataStructure {
+
+
+
+};
+
   const listFileTop = async () => {
     console.log('test')
     const result = await listFile();
-    setFileText(result.join('\n'));
+    setFileText(result
+      .map(result.filename)
+      .join('\n'));
     console.log('finished recursion')
+    console.log(result)
 
   }
 
