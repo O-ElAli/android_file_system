@@ -60,71 +60,101 @@ const App = () => {
 
   const listFile = async () => {
     try {
-      const filePath = `${Dirs.SDCardDir}`;
-
-      console.log(filePath)
-
-      const recursiveFileSearch = async (currentPath) => {
-        let result = []
-
-        const files = await FileSystem.ls(currentPath);
-
-        for (const file of files){
-          //use stat
-          const tempPath = `${currentPath}/${file}`
-
-          const stat = await FileSystem.stat(tempPath);
-
-          //console.log(tempPath);
-
-          if(stat.type === "directory"){
-            //console.log('reached the else')
-            console.log('test2')
-            const recursiveResult =  await recursiveFileSearch(tempPath)
-            //console.log(recursiveResult)
-            result = result.concat(recursiveResult);
-          }
-          else{
-            result.push(tempPath);
-            console.log('result1')
-          }
 
 
 
-          // if(stat.type == "file"){
-          //   result.push(tempPath);
-          //   console.log('result1')
-          // }
-          // else if (stat.type == "directory"){
-          //   //console.log('reached the else')
-          //   console.log('test2')
-          //   const recursiveResult =  await recursiveFileSearch(tempPath)
-          //   //console.log(recursiveResult)
-          //   result = result.concat(recursiveResult);
 
-          // }
-          
-        }
-        console.log(result)
-        return(result)
-        // setFileText(files.join('\n'))
-      }
-      
-      return(recursiveFileSearch(filePath));
+
     } catch (error) {
+      
     }
+  };
+
+
+
+
+
+  class Node {
+
+    constructor(data){
+      //each node will contain this information about itself
+      this.data = data;
+      // this.name = name;
+      // this.size = size;
+      // this.type = type;
+      this.children = []; //initiate each node with 0 children
+    }
+  };
+  
+  let root = new Node('root');
+  let node1 = new Node('node1');
+  let node2 = new Node('node2');
+  let node3 = new Node('node3');
+  let node4 = new Node('node4');
+  let node5 = new Node('node5');
+  let node6 = new Node('node6');
+  let node7 = new Node('node7');
+  let node8 = new Node('node8');
+  let node9 = new Node('node9');
+  let node10 = new Node('node10');
+  
+  root.children = [node1, node2, node3,];
+  
+  node1.children = [node5, node6];
+  node2.children = [node7, node8];
+  node3.children = [node4];
+  node4.children = [node9, node10];
+  
+  
+  // console.log(root);
+  
+  let testing = []
+
+  //testing[node1[node5,node6],...]
+
+  function depthFirstSearch(node){
+    if(!node) return;
+    
+    testing.push(node);
+    
+    node.children.map(child => {
+      depthFirstSearch(child);
+    })
+  
+    return testing;
   }
+  
 
+  const testingDSA = () => {
+    const resultat = depthFirstSearch(root);
+    
+    // resultat.forEach(node =>{
+      
+    //   console.log(node.data + ' and children: ' + node.children)
+      
+    // })
+    console.log(testing)
+    testing=[]
+  }
+  
+  
+class FileNode {
 
-class dataStructure {
+  constructor(name, size, type){
+    //each node will contain this information about itself
 
+    this.name = name;
+    this.size = size;
+    this.type = type;
+    this.children = []; //initiate each node with 0 children
+  }
 
 
 };
 
   const listFileTop = async () => {
     console.log('test')
-    const result = await listFile();
+    const result = listFile();
     setFileText(result
       .map(result.filename)
       .join('\n'));
@@ -153,7 +183,7 @@ class dataStructure {
 
 
 
-      <Button title="Update the file" onPress={handleFileOperations} />  {/* Calls handleFileOperations on press */}
+      <Button title="Update the file" onPress={testingDSA} />  {/* Calls handleFileOperations on press */}
       <Text>
 
       </Text>
